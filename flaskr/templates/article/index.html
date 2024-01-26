@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Posts{% endblock %}</h1>
+    <form action="{{ url_for('article.create') }}" method="post">
+        <input class="action" type="submit" value="New">
+    </form>
+{% endblock %}
+
+{% block content %}
+  {% for article in articles %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ article['title'] }}</h1>
+          <div class="about">{{ article['release'] }}</div>
+        </div>
+        <form action="{{ url_for('article.delete', id=article['id']) }}" method="post">
+        <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+        </form>
+      </header>
+      <p class="body">{{ article['link'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

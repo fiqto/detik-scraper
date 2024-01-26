@@ -1,0 +1,1 @@
+Detik.com Scraper
