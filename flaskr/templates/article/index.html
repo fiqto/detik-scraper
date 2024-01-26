@@ -5,6 +5,9 @@
     <form action="{{ url_for('article.create') }}" method="post">
         <input class="action" type="submit" value="New">
     </form>
+    <form action="{{ url_for('article.export') }}" method="post">
+      <input class="action" type="submit" value="Export">
+  </form>
 {% endblock %}
 
 {% block content %}

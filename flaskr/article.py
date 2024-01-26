@@ -21,6 +21,21 @@ def index():
     ).fetchall()
     return render_template('article/index.html', articles=articles)
 
+@bp.route('/export', methods=('POST',))
+def export(path="output", file_name="data.csv"):
+    db = get_db()
+    articles = db.execute(
+        'SELECT p.id, title, link, release, created'
+        ' FROM article p'
+        ' ORDER BY created DESC'
+    ).fetchall()
+
+    df = pd.DataFrame(articles)
+    os.makedirs(path, exist_ok=True)  
+    df.to_csv(os.path.join(path, file_name), index=False)
+
+    return redirect(url_for('article.index'))
+
 @bp.route('/create', methods=('POST',))
 def create():
     url = 'https://www.detik.com/terpopuler/news'
