@@ -22,9 +22,9 @@ Untuk menggunakan project ini, ikuti langkah-langkah berikut:
 ```python
 pip install -r requirements.txt
 ```
-2. Jalankan server:
+2. Jalankan:
 ```python
-flask run
+flask --app flaskr run --debug
 ```
 3. Buka browser dan akses URL berikut:
 ```python
