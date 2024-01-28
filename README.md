@@ -1,6 +1,6 @@
 # Web Scraping Pada Detik.com
 
-Project ini merupakan aplikasi web scraping menggunakan Python. Project ini menggunakan Flask, Playwright, Beautifulsoup, dan Pandas.
+Project ini merupakan aplikasi web scraping menggunakan Python. Project ini menggunakan Flask, MongoDB, Playwright, Beautifulsoup, dan Pandas.
 
 ## Tujuan
 
@@ -8,11 +8,11 @@ Tujuan dari project ini adalah untuk mempelajari cara melakukan web scraping men
 
 ## Data
 
-Data yang digunakan dalam project ini adalah data produk dari web https://www.detik.com/terpopuler/news.
+Data yang digunakan dalam project ini adalah data artikel dari web https://www.detik.com/terpopuler/news.
 
 ## Output
 
-Output dari project ini adalah data produk dalam bentuk CSV.
+Output dari project ini adalah data artikel dalam bentuk CSV.
 
 ## Cara menggunakan
 
@@ -35,4 +35,4 @@ http://127.0.0.1:5000
 
 ## Kesimpulan
 
-Project ini telah berhasil melakukan scraping data produk dari web https://www.detik.com/terpopuler/news. Data produk yang diperoleh disimpan dalam folder output dengan nama file data.csv.
+Project ini telah berhasil melakukan scraping data artikel dari web https://www.detik.com/terpopuler/news. Data artikel yang diperoleh disimpan dalam folder output dengan nama file data.csv.

@@ -5,30 +5,34 @@ from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
 import os
-from werkzeug.exceptions import abort
-
-from flaskr.db import get_db
+from bson.objectid import ObjectId
+from flaskr.db import Connection
 
 bp = Blueprint('article', __name__)
+db = Connection('web-scraping')
 
 @bp.route('/')
 def index():
-    db = get_db()
-    articles = db.execute(
-        'SELECT p.id, title, link, release, created'
-        ' FROM article p'
-        ' ORDER BY created DESC'
-    ).fetchall()
-    return render_template('article/index.html', articles=articles)
+    articles=db.articles.find({}).sort('release', -1)
+    data = []
+    for article in articles:
+        id = article['_id']
+        title = article['title']
+        link = article['link']
+        release = article['release']
+        dataDict = {
+            'id': str(id),
+            'title': title,
+            'link': link,
+            'release': release,
+        }
+        data.append(dataDict)
+
+    return render_template('article/index.html', articles=data)
 
 @bp.route('/export', methods=('POST',))
 def export(path="output", file_name="data.csv"):
-    db = get_db()
-    articles = db.execute(
-        'SELECT p.id, title, link, release, created'
-        ' FROM article p'
-        ' ORDER BY created DESC'
-    ).fetchall()
+    articles=db.articles.find({})
 
     df = pd.DataFrame(articles)
     os.makedirs(path, exist_ok=True)  
@@ -57,40 +61,23 @@ def create():
             if not title:
                 error = 'Title is required.'
 
-            db = get_db()
-            row = db.execute('SELECT * FROM article WHERE link = ?', (link,)).fetchone()
+            row=db.articles.find_one({"link": link})
             if row:
                 continue
 
             if error is not None:
                 flash(error)
             else:
-                db.execute(
-                    'INSERT INTO article (title, link, release)'
-                    ' VALUES (?, ?, ?)',
-                    (title, link, release)
-                )
-                db.commit()
+                db.articles.insert_one({
+                    "title": title,
+                    "link": link,
+                    "release": release
+                })
     
     return redirect(url_for('article.index'))
-    
-def get_article(id):
-    articles = get_db().execute(
-        'SELECT p.id, title, link, release, created'
-        ' FROM article p'
-        ' WHERE p.id = ?',
-        (id,)
-    ).fetchone()
 
-    if articles is None:
-        abort(404, f"Articles id {id} doesn't exist.")
-
-    return articles
-
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/<string:id>/delete', methods=('POST',))
 def delete(id):
-    get_article(id)
-    db = get_db()
-    db.execute('DELETE FROM article WHERE id = ?', (id,))
-    db.commit()
+    db.articles.delete_one({'_id': ObjectId(id)})
+
     return redirect(url_for('article.index'))

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Posts{% endblock %}</h1>
+  <h1>{% block title %}Articles{% endblock %}</h1>
     <form action="{{ url_for('article.create') }}" method="post">
         <input class="action" type="submit" value="New">
     </form>
     <form action="{{ url_for('article.export') }}" method="post">
       <input class="action" type="submit" value="Export">
-  </form>
+    </form>
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
         <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
         </form>
       </header>
-      <p class="body">{{ article['link'] }}</p>
+      <p class="body"><a href="{{ article['link'] }}">Baca Selangkapnya</a></p>
     </article>
     {% if not loop.last %}
       <hr>
